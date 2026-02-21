@@ -17,6 +17,6 @@
  (name burvar)
  (synopsis "AVR MCU burner")
  (description "A tool for burning firmware to AVR MCU")
- (depends ocaml serialport intel_hex stk500)
+ (depends ocaml cmdliner serialport intel_hex stk500)
  (tags
   (avr embedded programmer)))

@@ -29,16 +29,23 @@ module Intf = struct
 
   let iter_string_per_page f str : unit =
     let rec aux (~address, ~mcu_page_size) =
-      let page =
-        String.sub str address (min (String.length str - address) mcu_page_size)
-      in
+      if address <= String.length str then begin
+        let page =
+          String.sub str address
+            (min (String.length str - address) mcu_page_size)
+        in
 
-      f (address, page);
+        if page <> String.empty then begin
+          f (address, page);
 
-      aux (~address:((address + String.length page) land 0xFFFF), ~mcu_page_size)
+          aux
+            ( ~address:((address + String.length page) land 0xFFFF),
+              ~mcu_page_size )
+        end
+      end
     in
 
-    aux (~address:0, ~mcu_page_size:120)
+    aux (~address:0x0000, ~mcu_page_size:120)
 end
 
 let upload serial_port binary =
@@ -68,6 +75,7 @@ let upload serial_port binary =
       Intf.load_flash_page ser_port page
     end
     binary;
+  L.info "Finish uploading loop";
 
   L.info "Exit programming mode";
   Intf.exit_programming_mode ser_port;

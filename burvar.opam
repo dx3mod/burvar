@@ -11,6 +11,7 @@ bug-reports: "https://github.com/dx3mod/stk500.ml/issues"
 depends: [
   "dune" {>= "3.6"}
   "ocaml"
+  "cmdliner"
   "serialport"
   "intel_hex"
   "stk500"
