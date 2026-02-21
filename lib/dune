@@ -1,2 +1,3 @@
 (library
- (name burvar))
+ (name burvar)
+ (libraries intel_hex stk500 serialport.unix))
