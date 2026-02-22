@@ -1,7 +1,7 @@
 let main ser_port_path programmer baud_rate firmware_path =
   let firmware_binary_data =
     In_channel.with_open_text firmware_path @@ fun ic ->
-    if Filename.extension firmware_path = "hex" then
+    if Filename.extension firmware_path = ".hex" then
       Burvar.Ihex_loader.binary_of_channel ic
     else In_channel.input_all ic
   in
