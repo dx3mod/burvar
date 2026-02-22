@@ -18,25 +18,26 @@ for some reasons, such as native system distribution (`.ext`, `.dmg`, distro's p
 After successfully installing the `burvar`, you can upload your firmware by using the `burvar upload` command on a connected AVR board. For more details see `burvar upload --help`.
 
 Example of burning firmware on an Arduino Uno board using the STK500 serial port protocol:
-```
+```console
 $ burvar upload -p stk500 -b 11520 -P /dev/cu.usbserial-11230 firmware.hex
 ```
 
 ```
-[MAIN.DEBUG] Using firmware file as INTEL HEX source: /tmp/firmware.hex
-[MAIN.DEBUG] Using stk500 programmer
-[UPLOAD.STK500] Initialize stage. Entering to programming mode.
-[UPLOAD.STK500] Reset the serial port (i.e. your board)
-[UPLOAD.STK500] Send |GET_SYNC| command
-[UPLOAD.STK500] Send |SET_DEVICE| command
-[UPLOAD.STK500] Send |ENTER_PROG_MODE| command. Entering to programming mode.
-[UPLOAD.STK500] Start firmware uploading cycle...
-[UPLOAD.STK500]  Send |LOAD_ADDRESS 0x0000| command
-[UPLOAD.STK500]  Send |LOAD_PAGE (0x78 bytes)| command
-[UPLOAD.STK500]  Send |LOAD_ADDRESS 0x0078| command
-[UPLOAD.STK500]  Send |LOAD_PAGE (0x38 bytes)| command
-[UPLOAD.STK500] Finished firmware uploading cycle
-[UPLOAD.STK500] Send |LEAVE_PROG_MODE| comm
+Using firmware file as INTEL HEX source: /tmp/playground/real.hex
+Using stk500 programmer
+Initialize stage. Entering to programming mode.
+Reset the serial port (i.e. your board)
+Send [GET_SYNC] command
+Send [SET_DEVICE] command
+Send |ENTER_PROG_MODE| command. Entering to programming mode.
+Start firmware uploading cycle...
+   Send [LOAD_ADDRESS 0x0000] command
+   Send [LOAD_PAGE (0x78 bytes)] command
+   Send [LOAD_ADDRESS 0x0078] command
+   Send [LOAD_PAGE (0x38 bytes)] command
+Finished firmware uploading cycle
+Send [LEAVE_PROG_MODE] command. Leave from programming mode.
+Successful uploading done.
 ```
 
 ## References

@@ -49,43 +49,38 @@ module Intf = struct
 end
 
 let upload serial_port binary =
-  Printf.printf
-    "[UPLOAD.STK500] Initialize stage. Entering to programming mode.\n";
+  Printf.printf "Initialize stage. Entering to programming mode.\n";
 
-  Printf.printf "[UPLOAD.STK500] Reset the serial port (i.e. your board)\n";
+  Printf.printf "Reset the serial port (i.e. your board)\n";
   Ser_port.reset serial_port;
 
   let ser_port = Serialport_unix.to_channels serial_port in
 
-  Printf.printf "[UPLOAD.STK500] Send |GET_SYNC| command\n";
+  Printf.printf "Send [GET_SYNC] command\n";
   Intf.sync ser_port;
 
-  Printf.printf "[UPLOAD.STK500] Send |SET_DEVICE| command\n";
+  Printf.printf "Send [SET_DEVICE] command\n";
   Intf.set_options ser_port;
 
   Printf.printf
-    "[UPLOAD.STK500] Send |ENTER_PROG_MODE| command. Entering to programming \
-     mode.\n";
+    "Send |ENTER_PROG_MODE| command. Entering to programming mode.\n";
   Intf.start_programming_mode ser_port;
 
-  Printf.printf "[UPLOAD.STK500] Start firmware uploading cycle...\n";
+  Printf.printf "Start firmware uploading cycle...\n";
   Intf.iter_string_per_page
     begin fun (address, page) ->
-      Printf.printf "[UPLOAD.STK500]\t Send |LOAD_ADDRESS 0x%04X| command\n"
-        address;
+      Printf.printf "   Send [LOAD_ADDRESS 0x%04X] command\n" address;
       Intf.load_address ser_port address;
 
-      Printf.printf "[UPLOAD.STK500]\t Send |LOAD_PAGE (0x%X bytes)| command\n"
+      Printf.printf "   Send [LOAD_PAGE (0x%X bytes)] command\n"
         (String.length page);
       Intf.load_flash_page ser_port page
     end
     binary;
 
-  Printf.printf "[UPLOAD.STK500] Finished firmware uploading cycle\n";
+  Printf.printf "Finished firmware uploading cycle\n";
 
-  Printf.printf
-    "[UPLOAD.STK500] Send |LEAVE_PROG_MODE| command. Leave from programming \
-     mode.\n";
+  Printf.printf "Send [LEAVE_PROG_MODE] command. Leave from programming mode.\n";
   Intf.exit_programming_mode ser_port;
 
-  Printf.printf "[UPLOAD.STK500] Successful uploading done.\n"
+  Printf.printf "Successful uploading done.\n"
