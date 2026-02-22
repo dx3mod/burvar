@@ -49,35 +49,43 @@ module Intf = struct
 end
 
 let upload serial_port binary =
-  let module L = Dolog.Log in
-  L.info "Initialize stage. Entering to programming mode.";
+  Printf.printf
+    "[UPLOAD.STK500] Initialize stage. Entering to programming mode.\n";
 
-  L.info "Reset the board";
+  Printf.printf "[UPLOAD.STK500] Reset the serial port (i.e. your board)\n";
   Ser_port.reset serial_port;
 
   let ser_port = Serialport_unix.to_channels serial_port in
 
-  L.info "Send [Sync] command";
+  Printf.printf "[UPLOAD.STK500] Send |GET_SYNC| command\n";
   Intf.sync ser_port;
 
-  L.info "Send [set_options] command";
+  Printf.printf "[UPLOAD.STK500] Send |SET_DEVICE| command\n";
   Intf.set_options ser_port;
 
-  L.info "Start programming mode";
+  Printf.printf
+    "[UPLOAD.STK500] Send |ENTER_PROG_MODE| command. Entering to programming \
+     mode.\n";
   Intf.start_programming_mode ser_port;
 
-  L.info "Start uploading loop";
+  Printf.printf "[UPLOAD.STK500] Start firmware uploading cycle...\n";
   Intf.iter_string_per_page
     begin fun (address, page) ->
-      L.info "Send [load_address 0x%04x]" address;
+      Printf.printf "[UPLOAD.STK500]\t Send |LOAD_ADDRESS 0x%04X| command\n"
+        address;
       Intf.load_address ser_port address;
-      L.info "Send [load_page %d size]" (String.length page);
+
+      Printf.printf "[UPLOAD.STK500]\t Send |LOAD_PAGE (0x%X bytes)| command\n"
+        (String.length page);
       Intf.load_flash_page ser_port page
     end
     binary;
-  L.info "Finish uploading loop";
 
-  L.info "Exit programming mode";
+  Printf.printf "[UPLOAD.STK500] Finished firmware uploading cycle\n";
+
+  Printf.printf
+    "[UPLOAD.STK500] Send |LEAVE_PROG_MODE| command. Leave from programming \
+     mode.\n";
   Intf.exit_programming_mode ser_port;
 
-  L.info "Done."
+  Printf.printf "[UPLOAD.STK500] Successful uploading done.\n"

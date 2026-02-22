@@ -38,4 +38,4 @@ let cmd f =
   let info = Cmd.info "burvar" ~doc:"A tool for burning firmware to AVR MCU" in
   Cmd.group info [ upload_cmd handle_upload_cmd ]
 
-let run f = exit (Cmdliner.Cmd.eval @@ cmd f)
+let run f = if !Sys.interactive then () else exit (Cmdliner.Cmd.eval @@ cmd f)
