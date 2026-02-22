@@ -35,7 +35,9 @@ let cmd f =
     | Some serial_port_path -> f serial_port_path firmware_binary_path
   in
 
-  let info = Cmd.info "burvar" ~doc:"A tool for burning firmware to AVR MCU" in
+  let info =
+    Cmd.info "burvar" ~doc:"A utility for burning firmware to AVR MCU"
+  in
   Cmd.group info [ upload_cmd handle_upload_cmd ]
 
 let run f = if !Sys.interactive then () else exit (Cmdliner.Cmd.eval @@ cmd f)
